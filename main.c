@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readcontent.c                                      :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hcherif <hcherif@student.42warsaw.pl>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/27 14:10:31 by hcherif           #+#    #+#             */
-/*   Updated: 2026/07/27 14:15:21 by hcherif          ###   ########.fr       */
+/*   Created: 2026/08/04 16:21:11 by hcherif           #+#    #+#             */
+/*   Updated: 2026/08/10 16:33:06 by hcherif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+#include <fcntl.h>
+#include <stdlib.h>
+#include <fcntl.h>
 #include <stdio.h>
+
 
 int	main()
 {
-	FILE	*fp = fopen("file.txt", "r");
-	char	ch;
+	int	fd;
+	char	*line;
+	
+	fd = open ("file.txt", O_RDONLY);
 
-	if (fp == NULL)
+	while ((line = get_next_line(fd)) != NULL)
 	{
-		printf("Unable to open file");
-		return 1;
+		printf("%s", line);
+		free(line);
 	}
-	while ((ch = fgetc(fp)) != EOF)
-		putchar(ch);
-	fclose(fp);
-
-	return 0;
+	close(fd);
+	return(0);
 }

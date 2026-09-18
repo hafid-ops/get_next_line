@@ -6,43 +6,41 @@
 #    By: hcherif <hcherif@student.42warsaw.pl>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/27 13:52:33 by hcherif           #+#    #+#              #
-#    Updated: 2026/07/27 15:01:07 by hcherif          ###   ########.fr        #
+#    Updated: 2026/08/10 16:53:34 by hcherif          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = getnextline.a 
-CC = cc 
-CFLAGS = -Wall -Wextra -Werror 
-AR = ar rcs 
-MAIN = main.c 
-SRC = get_next_line /
-	get_next_line_utils
+NAME = getnextline.a
 
-SRCS = $(addsuffix .c, $(SRC))
-OBJS = $(addsuffix .o, $(SRC))
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+AR = ar rcs
 
-%.o%.c: $(SRCS)
-    @$(CC) $(CFLAGS) -c -o $< $@ -D BUFFER_SIZE=42 <files>.c 
+SRCS = get_next_line.c get_next_line_utils.c
+OBJS = $(SRCS:.c=.o)
 
-$(NAME): $(OBJS)
-    @$(AR) $@ $^
+MAIN = main.c
+TEST = gnl_test
 
 all: $(NAME)
 
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-    @rm -fr $(OBJS) 
-    @echo "gg"
+	rm -f $(OBJS)
 
-fclean : clean
-    @rm -fr $(NAME)
+fclean: clean
+	rm -f $(NAME)
+	rm -f $(TEST)
 
-re : fclean all
+re: fclean all
 
-mm: 
-    @$(CC) $(CFLAGS) $(MAIN) $(NAME) -o test -lbsd
-    @echo "=================Test START ======================"
-    @./test
-    @echo "=================END============================="
+mm: $(NAME)
+	$(CC) $(CFLAGS) $(MAIN) $(NAME) -o $(TEST)
+	./$(TEST)
 
-.PHONY: all clean fclean re mm cmm
- 
+.PHONY: all clean fclean re mm
